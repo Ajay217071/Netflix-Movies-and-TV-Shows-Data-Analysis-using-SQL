@@ -1,18 +1,10 @@
 # Netflix Movies and TV Shows Data Analysis using SQL
 
-![logo](https://github.com/Ajay217071/Netflix-Movies-and-TV-Shows-Data-Analysis-using-SQL/blob/main/Netflix%20Data%20Analysis_%20Stories%20in%20SQL.png)
+![]()
 
 ## Overview
 
-SQL project analysing Netflix Movies and TV Shows data using PostgreSQL.
-
-## Objectives
-
-* Compare Movies and TV Shows.
-* Find common ratings.
-* Analyse countries, genres and release years.
-* Find directors, actors and movie durations.
-* Use SQL to answer 15 business problems.
+This project analyses Netflix Movies and TV Shows data using PostgreSQL and answers 15 business problems using SQL.
 
 ## Dataset
 
@@ -42,9 +34,9 @@ CREATE TABLE netflix (
 );
 ```
 
-## Business Problems and Solutions
+## 15 Business Problems
 
-### 1. Count Movies vs TV Shows
+### 1. Count the numbers of Movies vs TV Shows.
 
 ```sql
 SELECT type,
@@ -53,7 +45,7 @@ FROM netflix
 GROUP BY type;
 ```
 
-### 2. Find the Most Common Rating
+### 2. Find the most common rating for Movies and TV show.
 
 ```sql
 SELECT type, rating
@@ -65,12 +57,12 @@ FROM (
                ORDER BY COUNT(*) DESC
            ) AS ranking
     FROM netflix
-    GROUP BY 1, 2
+    GROUP BY 1,2
 ) AS t1
 WHERE ranking = 1;
 ```
 
-### 3. List Movies Released in 2020
+### 3. List all movies released in a specific year (e.g 2020)
 
 ```sql
 SELECT *
@@ -79,18 +71,19 @@ WHERE type = 'Movie'
   AND release_year = 2020;
 ```
 
-### 4. Top 5 Countries with Most Content
+### 4. Find the top 5 countries with the most content on Netflix.
 
 ```sql
-SELECT UNNEST(STRING_TO_ARRAY(country, ',')) AS new_country,
-       COUNT(show_id) AS total_contents
+SELECT
+    UNNEST(STRING_TO_ARRAY(country,',')) AS new_country,
+    COUNT(show_id) AS total_contents
 FROM netflix
 GROUP BY 1
 ORDER BY 2 DESC
 LIMIT 5;
 ```
 
-### 5. Identify the Longest Movie
+### 5. Identify the longest movie.
 
 ```sql
 SELECT *
@@ -102,16 +95,16 @@ ORDER BY CAST(
 LIMIT 1;
 ```
 
-### 6. Content Added in the Last 5 Years
+### 6. Find the content added in the last 5 years
 
 ```sql
 SELECT *
 FROM netflix
-WHERE TO_DATE(date_added, 'Month DD, YYYY')
+WHERE TO_DATE(date_added,'Month DD, YYYY')
       >= CURRENT_DATE - INTERVAL '5 Years';
 ```
 
-### 7. Content by Director Rajiv Chilaka
+### 7. Find all the movies/ TV shows by director 'Rajiv Chilaka'.
 
 ```sql
 SELECT *
@@ -119,48 +112,50 @@ FROM netflix
 WHERE director ILIKE '%Rajiv Chilaka%';
 ```
 
-### 8. TV Shows with More Than 5 Seasons
+### 8. List all TV Shows with more than 5 seasons.
 
 ```sql
 SELECT *
 FROM netflix
 WHERE type = 'TV Show'
-  AND CAST(SPLIT_PART(duration, ' ', 1) AS INT) > 5;
+  AND CAST(SPLIT_PART(duration,' ',1) AS INT) > 5;
 ```
 
-### 9. Count Content in Each Genre
+### 9. Count the no. of content in each genre.
 
 ```sql
-SELECT UNNEST(STRING_TO_ARRAY(listed_in, ',')) AS genre,
-       COUNT(*)
+SELECT
+    UNNEST(STRING_TO_ARRAY(listed_in,',')) AS genre,
+    COUNT(*)
 FROM netflix
 GROUP BY genre;
 ```
 
-### 10. Top 5 Years for Indian Content
+### 10. Find each year and the average number of content releases by India on Netflix.
 
 ```sql
 SELECT
-    EXTRACT(YEAR FROM TO_DATE(date_added, 'Month DD, YYYY')) AS year,
-    COUNT(*) AS total_content,
+    EXTRACT(
+        YEAR FROM TO_DATE(date_added,'Month DD, YYYY')
+    ) AS year,
+    COUNT(*),
     COUNT(*)::NUMERIC /
-    (SELECT COUNT(*)
-     FROM netflix
-     WHERE country = 'India')::NUMERIC * 100
-     AS avg_content_per_year
+    (
+        SELECT COUNT(*)
+        FROM netflix
+        WHERE country = 'India'
+    )::NUMERIC * 100 AS avg_content_per_year
 FROM netflix
 WHERE country = 'India'
-GROUP BY 1
-ORDER BY avg_content_per_year DESC
-LIMIT 5;
+GROUP BY 1;
 ```
 
-### 11. Find Documentary Content
+### 11. List all movies that are documentaries.
 
 ```sql
 WITH cte AS (
     SELECT *,
-           UNNEST(STRING_TO_ARRAY(listed_in, ',')) AS genre
+           UNNEST(STRING_TO_ARRAY(listed_in,',')) AS genre
     FROM netflix
 )
 SELECT COUNT(*) AS total_count
@@ -168,7 +163,7 @@ FROM cte
 WHERE genre ILIKE 'Documentaries';
 ```
 
-### 12. Find Content Without a Director
+### 12. Find all content without a Director.
 
 ```sql
 SELECT title
@@ -176,20 +171,20 @@ FROM netflix
 WHERE director IS NULL;
 ```
 
-### 13. Salman Khan Movies in the Last 10 Years
+### 13. Find how many movies actor Salman Khan appeared in over the last 10 years.
 
 ```sql
 SELECT *
 FROM netflix
 WHERE casts ILIKE '%Salman Khan%'
-  AND release_year > EXTRACT(YEAR FROM CURRENT_DATE) - 10;
+  AND release_year > EXTRACT(YEAR FROM CURRENT_DATE)-10;
 ```
 
-### 14. Top 10 Actors in Indian Content
+### 14. Find the top 10 actors who appeared in the highest number of movoes produced in India.
 
 ```sql
 SELECT
-    UNNEST(STRING_TO_ARRAY(casts, ',')) AS actors,
+    UNNEST(STRING_TO_ARRAY(casts,',')) AS actors,
     COUNT(*) AS total_content
 FROM netflix
 WHERE country ILIKE '%india'
@@ -198,7 +193,7 @@ ORDER BY 2 DESC
 LIMIT 10;
 ```
 
-### 15. Categorise Content Using Keywords
+### 15. Categorise the contents based on presence of keywords 'kill' and 'violence' in description field. label content as "Bad" and all other content as "Good". count count how many items fall into each category.
 
 ```sql
 WITH new_table AS (
@@ -219,8 +214,10 @@ GROUP BY category;
 
 ## SQL Skills Used
 
-* SELECT / WHERE
-* GROUP BY / ORDER BY
+* SELECT
+* WHERE
+* GROUP BY
+* ORDER BY
 * COUNT
 * CTE
 * Subqueries
@@ -229,7 +226,7 @@ GROUP BY category;
 * UNNEST()
 * STRING_TO_ARRAY()
 * SPLIT_PART()
-* Date functions
+* Date Functions
 * ILIKE
 
 ## Project Structure
@@ -243,7 +240,7 @@ Netflix-SQL-Project/
 
 ## Conclusion
 
-This project demonstrates how SQL can be used to answer practical business questions from Netflix content data.
+This project demonstrates the use of SQL to solve practical business problems using Netflix Movies and TV Shows data.
 
 ## Author
 
