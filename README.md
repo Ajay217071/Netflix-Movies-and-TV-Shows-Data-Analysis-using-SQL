@@ -1,5 +1,6 @@
 # Netflix Movies and TV Shows Data Analysis using SQL
-[](https://github.com/Ajay217071/Netflix-Movies-and-TV-Shows-Data-Analysis-using-SQL/blob/main/Netflix%20Data%20Analysis_%20Stories%20in%20SQL.png)
+
+[logo](https://github.com/Ajay217071/Netflix-Movies-and-TV-Shows-Data-Analysis-using-SQL/blob/main/Netflix%20Data%20Analysis_%20Stories%20in%20SQL.png)
 
 ## Overview
 
